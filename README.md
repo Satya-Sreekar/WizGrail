@@ -32,4 +32,4 @@ This repo is set up to deploy to GitHub Pages via the workflow at
 **If deploying to project pages instead** (e.g. `https://<user>.github.io/<repo>/`)
 
 - Delete `public/CNAME`.
-- In the workflow, change `VITE_BASE: '/'` to `VITE_BASE: /<repo-name>/`.
+- In the workflow, change `VITE_BASE: '/'` to `VITE_BASE: /WizGrail/`.
