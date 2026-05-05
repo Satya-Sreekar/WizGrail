@@ -318,7 +318,7 @@ export function Footer() {
         <div className="footer__top">
           <div className="footer__brand">
             <a className="brand brand--footer" href="#top">
-              <span className="brand__mark"><img src="/assets/logo.png" alt="" width="36" height="36" /></span>
+              <span className="brand__mark"><img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="" width="36" height="36" /></span>
               <span className="brand__name">WizGrail<span className="brand__sub">AI Enabler</span></span>
             </a>
             <p>AI that integrates with the systems your business already runs. No rip-and-replace, no migration, no platform lock-in.</p>

@@ -42,7 +42,7 @@ export default function Nav() {
       <div className="container nav__row">
         <a className="brand" href="#top" aria-label="WizGrail home">
           <span className="brand__mark" aria-hidden="true">
-            <img src="/assets/logo.png" alt="" width="36" height="36" />
+            <img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="" width="36" height="36" />
           </span>
           <span className="brand__name">WizGrail<span className="brand__sub">AI Enabler</span></span>
         </a>

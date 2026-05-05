@@ -125,7 +125,7 @@ export default function Hero() {
             />
             <motion.img
               className="logo-card__img"
-              src="/assets/logo.png"
+              src={`${import.meta.env.BASE_URL}assets/logo.png`}
               alt=""
               width="600"
               height="338"
