@@ -1,9 +1,10 @@
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import Reveal, { fadeUp, stagger } from './Reveal'
 import {
   LayersIcon, PlugIcon, BotIcon, RocketIcon,
   BarsIcon, FlowIcon, LinkIcon, ScaleIcon, ShieldIcon,
-  ClockIcon, MailIcon, WhatsAppIcon,
+  ClockIcon, MailIcon, WhatsAppIcon, CheckIcon,
 } from './Icons'
 
 const ease = [0.22, 1, 0.36, 1]
@@ -242,53 +243,322 @@ export function About() {
 }
 
 const missionPoints = [
-  'Reduce manual and repetitive work through automation',
-  'Improve operational efficiency and productivity',
-  'Enable lightning-fast and data-driven decision-making',
-  'Deliver predictive analytics and actionable business insights',
-  'Seamlessly integrate with existing enterprise systems',
-  'Drive sustainable growth through innovation and intelligence',
+  { Icon: BotIcon, text: 'Reduce manual and repetitive work through automation' },
+  { Icon: BarsIcon, text: 'Improve operational efficiency and productivity' },
+  { Icon: RocketIcon, text: 'Enable lightning-fast and data-driven decision-making' },
+  { Icon: FlowIcon, text: 'Deliver predictive analytics and actionable business insights' },
+  { Icon: LinkIcon, text: 'Seamlessly integrate with existing enterprise systems' },
+  { Icon: ScaleIcon, text: 'Drive sustainable growth through innovation and intelligence' },
 ]
 
-export function AboutUs() {
+const aboutStats = [
+  { value: '30+', label: 'Years of combined IT leadership' },
+  { value: '100%', label: 'Integration-first, no rip-and-replace' },
+  { value: '4–8 wks', label: 'From pilot to measurable result' },
+]
+
+const pillars = [
+  { Icon: LinkIcon, title: 'Seamless integration', body: 'AI that augments your existing applications without disrupting how your business runs today.' },
+  { Icon: ShieldIcon, title: 'Secure & enterprise-ready', body: 'Built for mission-critical environments with security, governance, and reliability at the core.' },
+  { Icon: ScaleIcon, title: 'Scalable by design', body: 'Start with one workflow, expand across teams and functions as confidence and value grow.' },
+  { Icon: BarsIcon, title: 'Measurable impact', body: 'Every deployment is tied to outcomes — productivity, decisions, and ROI you can track.' },
+]
+
+export function AboutTeaser() {
   return (
-    <section className="section" id="about-us">
+    <section className="section about-teaser-section">
       <div className="container">
-        <Reveal as="header" className="section__head">
-          <span className="tag">About Us</span>
-          <h2 className="h2" style={{ marginTop: 12 }}>A next-generation AI technology company</h2>
-        </Reveal>
-
-        <Reveal as="p" className="lede">
-          We are a next-generation AI technology company focused on delivering state-of-the-art Artificial Intelligence platforms that transform the way businesses operate. Led by a team of highly experienced professionals with over 30 years of expertise in delivering IT solutions and services, we combine deep industry knowledge with cutting-edge innovation to build intelligent, scalable, and future-ready AI ecosystems.
-        </Reveal>
-        <Reveal as="p" className="sub">
-          Our strength lies in developing AI platforms that seamlessly integrate with existing enterprise applications and workflows without disrupting ongoing operations. We understand that businesses need practical AI solutions that enhance performance while preserving operational continuity. That is why our platforms are designed for rapid adoption, scalability, security, and measurable business impact.
-        </Reveal>
-        <Reveal as="p" className="sub">
-          By leveraging advanced AI, machine learning, predictive analytics, and intelligent automation, we help organizations unlock new levels of productivity, efficiency, and strategic decision-making.
-        </Reveal>
-
-        <div className="vm-grid">
-          <Reveal className="vm-card">
-            <span className="tag">Vision</span>
-            <p>
-              To become a global leader in AI innovation by delivering highly effective and intelligent AI platforms that seamlessly integrate with existing business applications, enabling organizations to accelerate digital transformation without disruption.
+        <Reveal className="about-teaser">
+          <div className="about-teaser__glow" aria-hidden="true" />
+          <div className="about-teaser__copy">
+            <span className="tag tag--light">About WizGrail</span>
+            <h2 className="h2 h2--light" style={{ marginTop: 12 }}>
+              30+ years of enterprise IT, focused on practical AI.
+            </h2>
+            <p className="lede lede--light">
+              We build AI platforms that integrate with the systems you already run — no rip-and-replace, just measurable impact.
             </p>
-          </Reveal>
-          <Reveal className="vm-card">
-            <span className="tag">Mission</span>
-            <p>Our mission is to empower businesses with intelligent AI platforms that:</p>
-            <ul className="vm-list">
-              {missionPoints.map((m) => <li key={m}>{m}</li>)}
-            </ul>
-            <p>
-              We are committed to helping organizations harness the full potential of Artificial Intelligence to create smarter, faster, and more agile businesses for the future.
-            </p>
-          </Reveal>
-        </div>
+          </div>
+          <motion.a
+            href="#/about-us"
+            className="btn btn--primary btn--lg"
+            whileHover={{ y: -2 }}
+            whileTap={{ y: 0, scale: 0.98 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+          >
+            Learn more about us →
+          </motion.a>
+        </Reveal>
       </div>
     </section>
+  )
+}
+
+function AboutHero() {
+  const ref = useRef(null)
+  const reduce = useReducedMotion()
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  const yA = useTransform(scrollYProgress, [0, 1], [0, -120])
+  const yB = useTransform(scrollYProgress, [0, 1], [0, 80])
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0.4])
+  const gridY = useTransform(scrollYProgress, [0, 1], [0, -60])
+  const titleWords = 'Building intelligent AI platforms that work with what already works.'.split(' ')
+
+  return (
+    <section className="about-hero" id="about-us" ref={ref}>
+      <div className="about-hero__aurora" aria-hidden="true">
+        <motion.div
+          className="about-hero__blob about-hero__blob--a"
+          style={reduce ? undefined : { y: yA }}
+          animate={reduce ? undefined : { x: [0, 40, -20, 0], scale: [1, 1.1, 0.95, 1] }}
+          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="about-hero__blob about-hero__blob--b"
+          style={reduce ? undefined : { y: yB }}
+          animate={reduce ? undefined : { x: [0, -30, 20, 0], scale: [1, 0.92, 1.08, 1] }}
+          transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div className="about-hero__grid-bg" style={reduce ? undefined : { y: gridY }} />
+      </div>
+
+      <div className="container">
+        <motion.div className="about-hero__copy" style={reduce ? undefined : { opacity: titleOpacity }}>
+          <motion.span
+            className="tag tag--light"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          >
+            About WizGrail
+          </motion.span>
+          <h1 className="display about-hero__title" aria-label={titleWords.join(' ')}>
+            {titleWords.map((w, i) => (
+              <motion.span
+                key={i}
+                aria-hidden="true"
+                className="about-hero__word"
+                initial={{ opacity: 0, y: 28, filter: 'blur(8px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.15 + i * 0.05 }}
+              >
+                {w}
+              </motion.span>
+            ))}
+          </h1>
+          <motion.p
+            className="lede lede--light"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.7 }}
+          >
+            A next-generation AI technology company combining 30+ years of enterprise IT expertise with cutting-edge innovation — to deliver scalable, future-ready AI ecosystems that accelerate transformation without disruption.
+          </motion.p>
+        </motion.div>
+
+        <motion.div
+          className="about-stats"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={stagger(0.12)}
+        >
+          {aboutStats.map((s) => (
+            <motion.div
+              key={s.label}
+              className="about-stat"
+              variants={fadeUp}
+              whileHover={{ y: -4, scale: 1.02 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 22 }}
+            >
+              <motion.strong
+                initial={{ opacity: 0, scale: 0.6, rotate: -6 }}
+                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+              >
+                {s.value}
+              </motion.strong>
+              <span>{s.label}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+export function AboutUsPage() {
+  return (
+    <>
+      {/* Hero banner */}
+      <AboutHero />
+
+      {/* Story */}
+      <section className="section">
+        <div className="container narrow narrow--center">
+          <motion.div initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} variants={stagger(0.12)}>
+            <motion.span className="tag" variants={fadeUp}>Our story</motion.span>
+            <motion.h2 className="h2" style={{ marginTop: 12 }} variants={fadeUp}>
+              Practical AI, built by operators who have shipped at scale.
+            </motion.h2>
+            <motion.p className="lede" variants={fadeUp}>
+              We are a next-generation AI technology company focused on delivering state-of-the-art Artificial Intelligence platforms that transform the way businesses operate. Led by a team of highly experienced professionals with over 30 years of expertise in delivering IT solutions and services, we combine deep industry knowledge with cutting-edge innovation to build intelligent, scalable, and future-ready AI ecosystems.
+            </motion.p>
+            <motion.p className="sub" variants={fadeUp}>
+              Our strength lies in developing AI platforms that seamlessly integrate with existing enterprise applications and workflows without disrupting ongoing operations. We understand that businesses need practical AI solutions that enhance performance while preserving operational continuity. That is why our platforms are designed for rapid adoption, scalability, security, and measurable business impact.
+            </motion.p>
+            <motion.p className="sub" variants={fadeUp}>
+              By leveraging advanced AI, machine learning, predictive analytics, and intelligent automation, we help organizations unlock new levels of productivity, efficiency, and strategic decision-making.
+            </motion.p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Pillars */}
+      <section className="section section--alt">
+        <div className="container">
+          <Reveal as="header" className="section__head">
+            <span className="tag">What sets us apart</span>
+            <h2 className="h2" style={{ marginTop: 12 }}>Four principles behind every platform we build.</h2>
+          </Reveal>
+          <motion.div
+            className="cap-grid"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={stagger(0.08)}
+          >
+            {pillars.map(({ Icon, title, body }, i) => (
+              <motion.article
+                key={title}
+                className="cap pillar"
+                variants={fadeUp}
+                whileHover={{ y: -6 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+              >
+                <motion.div
+                  className="cap__icon"
+                  initial={{ rotate: -10, scale: 0.7 }}
+                  whileInView={{ rotate: 0, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 18, delay: 0.1 + i * 0.06 }}
+                  whileHover={{ rotate: [0, -6, 6, 0], transition: { duration: 0.5 } }}
+                >
+                  <Icon />
+                </motion.div>
+                <h3>{title}</h3>
+                <p>{body}</p>
+              </motion.article>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Vision + Mission split */}
+      <section className="section">
+        <div className="container">
+          <div className="vm-grid">
+            <motion.div
+              className="vm-card vm-card--vision"
+              initial={{ opacity: 0, x: -24 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -6 }}
+            >
+              <motion.div
+                className="vm-card__icon"
+                initial={{ scale: 0.5, rotate: -20 }}
+                whileInView={{ scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 0.25 }}
+                whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.5 } }}
+              >
+                <RocketIcon />
+              </motion.div>
+              <span className="tag">Vision</span>
+              <h3 className="vm-card__h">A global leader in AI innovation.</h3>
+              <p>
+                To become a global leader in AI innovation by delivering highly effective and intelligent AI platforms that seamlessly integrate with existing business applications, enabling organizations to accelerate digital transformation without disruption.
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="vm-card vm-card--mission"
+              initial={{ opacity: 0, x: 24 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -6 }}
+            >
+              <motion.div
+                className="vm-card__icon"
+                initial={{ scale: 0.5, rotate: 20 }}
+                whileInView={{ scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 0.25 }}
+                whileHover={{ rotate: [0, 10, -10, 0], transition: { duration: 0.5 } }}
+              >
+                <BotIcon />
+              </motion.div>
+              <span className="tag">Mission</span>
+              <h3 className="vm-card__h">Empower businesses with intelligent AI platforms.</h3>
+              <motion.ul
+                className="vm-list vm-list--icons"
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.2 }}
+                variants={stagger(0.06)}
+              >
+                {missionPoints.map(({ text }) => (
+                  <motion.li key={text} variants={fadeUp} whileHover={{ x: 4 }} transition={{ type: 'spring', stiffness: 400, damping: 22 }}>
+                    <motion.span
+                      className="vm-list__icon"
+                      aria-hidden="true"
+                      initial={{ scale: 0 }}
+                      whileInView={{ scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 18, delay: 0.1 }}
+                    >
+                      <CheckIcon />
+                    </motion.span>
+                    <span>{text}</span>
+                  </motion.li>
+                ))}
+              </motion.ul>
+              <p className="vm-card__close">
+                We are committed to helping organizations harness the full potential of Artificial Intelligence to create smarter, faster, and more agile businesses for the future.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="section">
+        <div className="container">
+          <Reveal className="cta__card about-cta">
+            <h2 className="h2">Let's build your AI advantage.</h2>
+            <p className="sub">Talk to our team about a 4–8 week pilot tailored to your existing systems.</p>
+            <div className="cta__buttons" style={{ marginTop: 22 }}>
+              <motion.a
+                href="https://wa.me/919951389007"
+                className="btn btn--primary btn--lg"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ y: -2 }}
+                whileTap={{ y: 0, scale: 0.98 }}
+              >
+                <WhatsAppIcon width="16" height="16" />
+                Book a discovery call
+              </motion.a>
+              <a href="#/" className="btn btn--ghost btn--lg">Back to home</a>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+    </>
   )
 }
 
@@ -368,7 +638,7 @@ export function Footer() {
       <div className="container">
         <div className="footer__top">
           <div className="footer__brand">
-            <a className="brand brand--footer" href="#top">
+            <a className="brand brand--footer" href="#/">
               <span className="brand__mark"><img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="" width="36" height="36" /></span>
               <span className="brand__name">WizGrail<span className="brand__sub">AI Enabler</span></span>
             </a>
@@ -388,7 +658,7 @@ export function Footer() {
             </div>
             <div className="footer__col">
               <h5>Company</h5>
-              <a href="#about-us">About Us</a>
+              <a href="#/about-us">About Us</a>
               <a href="#about">Team</a>
               <a href="#engagement">How we engage</a>
               <a href="#trust">Security</a>

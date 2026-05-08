@@ -366,24 +366,131 @@ a.contact-card:hover{border-color:var(--line);box-shadow:var(--shadow-sm)}
   color:#5b21b6;background:var(--orange-soft);
 }
 
-/* ---------- About Us / Vision-Mission ---------- */
-.vm-grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:32px}
-@media (min-width:760px){.vm-grid{grid-template-columns:1fr 1fr}}
+/* ---------- About teaser (home) ---------- */
+.about-teaser-section{padding:clamp(40px,6vw,72px) 0}
+.about-teaser{
+  position:relative;overflow:hidden;isolation:isolate;
+  background:linear-gradient(135deg,#1a0d3a 0%,#4c1d95 60%,#7c3aed 100%);
+  color:#fff;border-radius:var(--r-xl);
+  padding:clamp(28px,4vw,40px) clamp(28px,5vw,48px);
+  display:grid;grid-template-columns:1fr;gap:24px;align-items:center;
+  box-shadow:var(--shadow-lg);
+  border:1px solid rgba(255,255,255,.1);
+}
+@media (min-width:820px){.about-teaser{grid-template-columns:1fr auto;gap:32px}}
+.about-teaser__glow{
+  position:absolute;inset:-30% -10% auto auto;width:60%;aspect-ratio:1/1;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(167,139,250,.55),transparent 70%);
+  filter:blur(60px);pointer-events:none;z-index:-1;
+}
+.about-teaser__copy{max-width:640px}
+.about-teaser .h2{margin:0 0 10px}
+.about-teaser .lede{margin:0;max-width:60ch}
+
+/* ---------- About Us page ---------- */
+.about-hero{
+  position:relative;isolation:isolate;overflow:hidden;color:#fff;
+  padding:clamp(72px,10vw,128px) 0 clamp(56px,8vw,96px);
+  background:linear-gradient(160deg,#1a0d3a 0%, #2d1b69 55%, #4c1d95 100%);
+}
+.about-hero__aurora{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.about-hero__blob{
+  position:absolute;width:60vw;max-width:680px;aspect-ratio:1/1;border-radius:50%;
+  filter:blur(90px);opacity:.55;will-change:transform;
+}
+.about-hero__blob--a{left:-10%;top:-20%;background:radial-gradient(closest-side,#a78bfa,transparent 70%)}
+.about-hero__blob--b{right:-15%;bottom:-25%;background:radial-gradient(closest-side,#7c3aed,transparent 70%)}
+.about-hero__grid-bg{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%);
+  opacity:.35;
+}
+.about-hero__copy{max-width:780px;margin:0 auto;text-align:center}
+.about-hero__title{
+  font-size:clamp(34px,5.4vw,60px);line-height:1.12;margin:14px 0 18px;color:#fff;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:.28em;
+}
+.about-hero__word{display:inline-block;will-change:transform,opacity,filter}
+.pillar{position:relative;overflow:hidden}
+.pillar::after{
+  content:"";position:absolute;inset:auto -20% -60% auto;width:60%;aspect-ratio:1/1;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(124,58,237,.18),transparent 70%);
+  opacity:0;transition:opacity .35s ease;pointer-events:none;
+}
+.pillar:hover::after{opacity:1}
+.tag--light{
+  color:#e9deff;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);
+}
+.about-stats{
+  margin-top:clamp(40px,6vw,64px);
+  display:grid;grid-template-columns:1fr;gap:14px;
+  max-width:880px;margin-inline:auto;
+}
+@media (min-width:680px){.about-stats{grid-template-columns:repeat(3,1fr)}}
+.about-stat{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--r-lg);
+  padding:22px 20px;text-align:center;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.about-stat strong{
+  display:block;
+  font-family:'Fraunces',serif;font-weight:600;
+  font-size:clamp(30px,4vw,42px);letter-spacing:-.02em;line-height:1;
+  color:#fff;margin-bottom:8px;
+  background:linear-gradient(135deg,#fff,#d4c5ff);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.about-stat span{color:rgba(255,255,255,.72);font-size:13.5px;line-height:1.45}
+
+/* Vision / Mission cards */
+.vm-grid{display:grid;grid-template-columns:1fr;gap:20px;margin-top:8px}
+@media (min-width:880px){.vm-grid{grid-template-columns:1fr 1fr}}
 .vm-card{
-  background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);
-  padding:28px;box-shadow:var(--shadow-sm);
-  border-top:3px solid var(--orange);
-  display:flex;flex-direction:column;gap:12px;
+  position:relative;overflow:hidden;
+  background:#fff;border:1px solid var(--line-2);border-radius:var(--r-xl);
+  padding:32px 30px;box-shadow:var(--shadow-md);
+  display:flex;flex-direction:column;gap:14px;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.vm-card::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:4px;
+  background:linear-gradient(90deg,var(--orange),var(--orange-2));
+}
+.vm-card__icon{
+  width:52px;height:52px;border-radius:14px;
+  display:grid;place-items:center;color:#fff;
+  background:linear-gradient(135deg,var(--orange),var(--orange-2));
+  box-shadow:0 8px 18px -8px rgba(124,58,237,.6);
+}
+.vm-card__h{
+  font-family:'Fraunces',serif;font-weight:500;
+  font-size:clamp(22px,2.4vw,28px);letter-spacing:-.01em;line-height:1.2;margin:0;color:var(--ink);
 }
 .vm-card p{margin:0;color:var(--ink-3);line-height:1.65;font-size:15px}
-.vm-list{list-style:none;padding:0;margin:6px 0 0;display:grid;gap:10px}
-.vm-list li{
-  position:relative;padding-left:24px;color:var(--ink-2);font-size:14.5px;line-height:1.55;
+.vm-card__close{padding-top:8px;border-top:1px dashed var(--line);margin-top:6px}
+.vm-card--mission{background:linear-gradient(180deg,#fff 0%,#faf7ff 100%)}
+
+.vm-list{list-style:none;padding:0;margin:6px 0 0;display:grid;gap:12px}
+.vm-list--icons li{
+  display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:start;
+  padding-left:0;color:var(--ink-2);font-size:14.5px;line-height:1.5;
 }
-.vm-list li::before{
-  content:"";position:absolute;left:0;top:8px;width:8px;height:8px;border-radius:50%;
-  background:var(--orange);box-shadow:0 0 0 4px rgba(124,58,237,.18);
+.vm-list--icons li::before{display:none}
+.vm-list__icon{
+  width:24px;height:24px;border-radius:50%;
+  display:grid;place-items:center;flex-shrink:0;margin-top:1px;
+  background:var(--orange-soft);color:var(--orange);
 }
+
+.about-cta{text-align:center;background:linear-gradient(160deg,#fff 0%,#f5efff 100%);border:1px solid var(--line-2)}
+.about-cta .cta__buttons{justify-content:center}
 
 /* ---------- Sample workflows ---------- */
 .workflow-grid{display:grid;grid-template-columns:1fr;gap:18px}

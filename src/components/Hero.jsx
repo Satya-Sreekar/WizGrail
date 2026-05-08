@@ -37,17 +37,35 @@ export default function Hero() {
   const heroInView = useInView(heroRef, { amount: 0.05 })
   const looping = !reduce && heroInView
 
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+  const pxA = useSpring(mx, { stiffness: 60, damping: 20 })
+  const pyA = useSpring(my, { stiffness: 60, damping: 20 })
+  const pxB = useSpring(mx, { stiffness: 40, damping: 22 })
+  const pyB = useSpring(my, { stiffness: 40, damping: 22 })
+
+  const onMouseMove = (e) => {
+    if (reduce) return
+    const r = heroRef.current?.getBoundingClientRect()
+    if (!r) return
+    mx.set(((e.clientX - r.left) / r.width - 0.5) * 40)
+    my.set(((e.clientY - r.top) / r.height - 0.5) * 40)
+  }
+  const onMouseLeave = () => { mx.set(0); my.set(0) }
+
   return (
-    <section className="hero" id="top" ref={heroRef}>
+    <section className="hero" id="top" ref={heroRef} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
       <div className="hero__aurora" aria-hidden="true">
         <motion.div
           className="hero__blob hero__blob--a"
-          animate={looping ? { x: [0, 30, -10, 0], y: [0, -20, 10, 0] } : { x: 0, y: 0 }}
+          style={{ x: pxA, y: pyA }}
+          animate={looping ? { scale: [1, 1.08, 0.96, 1] } : { scale: 1 }}
           transition={{ duration: 18, repeat: looping ? Infinity : 0, ease: 'easeInOut' }}
         />
         <motion.div
           className="hero__blob hero__blob--b"
-          animate={looping ? { x: [0, -25, 15, 0], y: [0, 15, -20, 0] } : { x: 0, y: 0 }}
+          style={{ x: pxB, y: pyB }}
+          animate={looping ? { scale: [1, 0.94, 1.06, 1] } : { scale: 1 }}
           transition={{ duration: 22, repeat: looping ? Infinity : 0, ease: 'easeInOut' }}
         />
       </div>

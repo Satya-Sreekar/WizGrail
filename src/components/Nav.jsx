@@ -5,7 +5,7 @@ import { WhatsAppIcon } from './Icons'
 const links = [
   { href: '#integrate', label: 'How it works' },
   { href: '#workflows', label: 'Workflows' },
-  { href: '#about-us', label: 'About Us' },
+  { href: '#/about-us', label: 'About Us' },
   { href: '#process', label: 'Process' },
   { href: '#faq', label: 'FAQ' },
 ]
@@ -41,7 +41,7 @@ export default function Nav() {
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="container nav__row">
-        <a className="brand" href="#top" aria-label="WizGrail home">
+        <a className="brand" href="#/" aria-label="WizGrail home">
           <span className="brand__mark" aria-hidden="true">
             <img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="" width="36" height="36" />
           </span>
