@@ -5,6 +5,7 @@ import { WhatsAppIcon } from './Icons'
 const links = [
   { href: '#integrate', label: 'How it works' },
   { href: '#workflows', label: 'Workflows' },
+  { href: '#about-us', label: 'About Us' },
   { href: '#process', label: 'Process' },
   { href: '#faq', label: 'FAQ' },
 ]

@@ -241,6 +241,57 @@ export function About() {
   )
 }
 
+const missionPoints = [
+  'Reduce manual and repetitive work through automation',
+  'Improve operational efficiency and productivity',
+  'Enable lightning-fast and data-driven decision-making',
+  'Deliver predictive analytics and actionable business insights',
+  'Seamlessly integrate with existing enterprise systems',
+  'Drive sustainable growth through innovation and intelligence',
+]
+
+export function AboutUs() {
+  return (
+    <section className="section" id="about-us">
+      <div className="container">
+        <Reveal as="header" className="section__head">
+          <span className="tag">About Us</span>
+          <h2 className="h2" style={{ marginTop: 12 }}>A next-generation AI technology company</h2>
+        </Reveal>
+
+        <Reveal as="p" className="lede">
+          We are a next-generation AI technology company focused on delivering state-of-the-art Artificial Intelligence platforms that transform the way businesses operate. Led by a team of highly experienced professionals with over 30 years of expertise in delivering IT solutions and services, we combine deep industry knowledge with cutting-edge innovation to build intelligent, scalable, and future-ready AI ecosystems.
+        </Reveal>
+        <Reveal as="p" className="sub">
+          Our strength lies in developing AI platforms that seamlessly integrate with existing enterprise applications and workflows without disrupting ongoing operations. We understand that businesses need practical AI solutions that enhance performance while preserving operational continuity. That is why our platforms are designed for rapid adoption, scalability, security, and measurable business impact.
+        </Reveal>
+        <Reveal as="p" className="sub">
+          By leveraging advanced AI, machine learning, predictive analytics, and intelligent automation, we help organizations unlock new levels of productivity, efficiency, and strategic decision-making.
+        </Reveal>
+
+        <div className="vm-grid">
+          <Reveal className="vm-card">
+            <span className="tag">Vision</span>
+            <p>
+              To become a global leader in AI innovation by delivering highly effective and intelligent AI platforms that seamlessly integrate with existing business applications, enabling organizations to accelerate digital transformation without disruption.
+            </p>
+          </Reveal>
+          <Reveal className="vm-card">
+            <span className="tag">Mission</span>
+            <p>Our mission is to empower businesses with intelligent AI platforms that:</p>
+            <ul className="vm-list">
+              {missionPoints.map((m) => <li key={m}>{m}</li>)}
+            </ul>
+            <p>
+              We are committed to helping organizations harness the full potential of Artificial Intelligence to create smarter, faster, and more agile businesses for the future.
+            </p>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export function Contact() {
   return (
     <section className="section cta" id="contact">
@@ -337,7 +388,8 @@ export function Footer() {
             </div>
             <div className="footer__col">
               <h5>Company</h5>
-              <a href="#about">About</a>
+              <a href="#about-us">About Us</a>
+              <a href="#about">Team</a>
               <a href="#engagement">How we engage</a>
               <a href="#trust">Security</a>
               <a href="#faq">FAQ</a>

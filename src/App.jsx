@@ -2,7 +2,7 @@ import { motion, useScroll, useSpring } from 'framer-motion'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
 import {
-  Bring, Integrate, Problem, Challenge, Capabilities, About, Contact, Footer,
+  Bring, Integrate, Problem, Challenge, Capabilities, About, AboutUs, Contact, Footer,
 } from './components/Sections'
 import {
   Workflows, Industries, Timeline, Security, Engagement, FAQ, Trust,
@@ -28,6 +28,7 @@ export default function App() {
         <Workflows />
         <Industries />
         <About />
+        <AboutUs />
         <Engagement />
         <Trust />
         <FAQ />
