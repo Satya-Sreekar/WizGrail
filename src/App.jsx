@@ -3,10 +3,10 @@ import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
 import {
-  Bring, Integrate, Problem, Challenge, Capabilities, About, AboutTeaser, AboutUsPage, Contact, Footer,
+  Integrate, Capabilities, About, AboutTeaser, AboutUsPage, Contact, Footer,
 } from './components/Sections'
 import {
-  Workflows, Industries, Timeline, Engagement, FAQ, Trust,
+  StoryCarousel, Workflows, Industries, Timeline, Engagement, FAQ, Trust,
 } from './components/NewSections'
 
 const pageEase = [0.22, 1, 0.36, 1]
@@ -52,16 +52,14 @@ export default function App() {
           ) : (
             <motion.div key="home" variants={pageVariants} initial="initial" animate="enter" exit="exit">
               <Hero />
-              <Bring />
-              <Problem />
-              <Challenge />
-              <Integrate />
-              <Timeline />
+              <StoryCarousel />
               <Capabilities />
               <Workflows />
-              <Industries />
+              <Integrate />
+              <Timeline />
               <About />
               <AboutTeaser />
+              <Industries />
               <Engagement />
               <Trust />
               <FAQ />

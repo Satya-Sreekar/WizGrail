@@ -3,10 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { WhatsAppIcon } from './Icons'
 
 const links = [
-  { href: '#integrate', label: 'How it works' },
-  { href: '#workflows', label: 'Workflows' },
+  { href: '#solutions', label: 'Solutions' },
+  { href: '#why-wizgrail', label: 'Why WizGrail' },
   { href: '#/about-us', label: 'About Us' },
-  { href: '#process', label: 'Process' },
   { href: '#faq', label: 'FAQ' },
 ]
 

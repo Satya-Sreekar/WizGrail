@@ -74,16 +74,16 @@ export default function Hero() {
         <div className="hero__copy">
           <motion.h1
             className="display"
-            aria-label="AI Power Your Business."
+            aria-label="Cutting-edge AI for the modern SME."
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease }}
           >
-            {['AI', 'Power', 'Your', 'Business.'].map((word, i) => (
+            {['Cutting-edge', 'AI', 'for', 'the', 'modern', 'SME.'].map((word, i) => (
               <motion.span
                 key={i}
                 aria-hidden="true"
-                style={{ display: 'inline-block', marginRight: word === 'Business.' ? 0 : '0.28em' }}
+                style={{ display: 'inline-block', marginRight: word === 'SME.' ? 0 : '0.28em' }}
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease, delay: 0.1 + i * 0.08 }}
@@ -99,7 +99,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease, delay: 0.5 }}
           >
-            A practical AI platform that plugs into the applications you already run, so you can add intelligence without replacing what works.
+            Empowering SME businesses with cutting-edge AI — without disrupting what already works.
           </motion.p>
 
           <motion.div

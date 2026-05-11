@@ -155,7 +155,7 @@ export function Challenge() {
         </div>
         <Reveal className="challenge__counters">
           <div className="ccount"><strong>78%</strong><span>of SMEs report core workflows still run on systems older than five years</span></div>
-          <div className="ccount"><strong>3–5×</strong><span>typical multiplier on a full replacement vs. layering AI on top</span></div>
+          <div className="ccount"><strong>3–5×</strong><span>more cost and time to replace a core system than to layer AI on top of it</span></div>
           <div className="ccount"><strong>4–8 wks</strong><span>typical pilot to deliver a measurable result</span></div>
         </Reveal>
       </div>
@@ -164,19 +164,20 @@ export function Challenge() {
 }
 
 const caps = [
-  { Icon: BarsIcon, title: 'AI-driven insights', body: 'Predictive analytics and real-time dashboards built on the data you already have.' },
-  { Icon: FlowIcon, title: 'Process automation', body: 'Automate repetitive workflows across sales, finance, support, and operations.' },
-  { Icon: LinkIcon, title: 'Smart integrations', body: 'Connect AI to current applications without complex migrations or rewrites.' },
-  { Icon: ScaleIcon, title: 'Scalable architecture', body: 'Start with one workflow and expand as confidence and value grow.' },
-  { Icon: ShieldIcon, title: 'Secure & reliable', body: 'Enterprise-grade security suitable for mission-critical environments.' },
+  { Icon: LinkIcon, title: 'AI Integration', body: 'Plug intelligence into the applications you already run — no rip-and-replace, no migration.' },
+  { Icon: FlowIcon, title: 'Process Automation', body: 'Automate repetitive workflows across sales, finance, support, and operations.' },
+  { Icon: BarsIcon, title: 'Data Analytics', body: 'Predictive analytics and real-time dashboards built on the data you already have.' },
+  { Icon: BotIcon, title: 'Smart Workflows', body: 'AI-augmented workflows that route, decide, and act across your stack.' },
 ]
 
 export function Capabilities() {
   return (
-    <section className="section" id="capabilities">
+    <section className="section" id="solutions">
       <div className="container">
         <Reveal as="header" className="section__head">
-          <h2 className="h2">Capabilities</h2>
+          <span className="tag">Solutions</span>
+          <h2 className="h2" style={{ marginTop: 12 }}>Four ways WizGrail powers your business.</h2>
+          <p className="sub">A focused suite that drops into your existing stack and starts paying back in weeks, not quarters.</p>
         </Reveal>
 
         <motion.div
@@ -208,12 +209,13 @@ const disciplines = [
 
 export function About() {
   return (
-    <section className="section section--alt" id="about">
+    <section className="section section--alt" id="why-wizgrail">
       <div className="container">
         <Reveal as="header" className="section__head">
-          <h2 className="h2">The team you're hiring</h2>
+          <span className="tag">Why WizGrail</span>
+          <h2 className="h2" style={{ marginTop: 12 }}>Operators, not consultants.</h2>
           <p className="sub">
-            WizGrail was founded by operators who have built, scaled, and run organisations. Each founder brings 30+ years of experience and works directly with you during pilots — you're not handed off to a junior team after the kickoff.
+            WizGrail was founded by people who have built, scaled, and run organisations. Each founder brings 30+ years of experience and works directly with you during pilots — you're not handed off to a junior team after kickoff.
           </p>
         </Reveal>
 
@@ -650,22 +652,21 @@ export function Footer() {
 
           <div className="footer__cols">
             <div className="footer__col">
-              <h5>Product</h5>
-              <a href="#integrate">How it works</a>
-              <a href="#workflows">Workflows</a>
-              <a href="#capabilities">Capabilities</a>
-              <a href="#process">Process</a>
+              <h5>Solutions</h5>
+              <a href="#solutions">AI Integration</a>
+              <a href="#solutions">Process Automation</a>
+              <a href="#solutions">Data Analytics</a>
+              <a href="#solutions">Smart Workflows</a>
             </div>
             <div className="footer__col">
               <h5>Company</h5>
               <a href="#/about-us">About Us</a>
-              <a href="#about">Team</a>
-              <a href="#engagement">How we engage</a>
-              <a href="#trust">Security</a>
-              <a href="#faq">FAQ</a>
+              <a href="#why-wizgrail">Why WizGrail</a>
+              <a href="#contact">Contact</a>
+              <a href="#trust">Privacy & Security</a>
             </div>
             <div className="footer__col">
-              <h5>Contact</h5>
+              <h5>Get in touch</h5>
               <a href="tel:+919951389007">+91 99513 89007</a>
               <a href="https://wa.me/919951389007" target="_blank" rel="noopener noreferrer">WhatsApp</a>
               <a href="mailto:hello@wizgrail.com">hello@wizgrail.com</a>
@@ -675,8 +676,8 @@ export function Footer() {
         </div>
 
         <div className="footer__bottom">
-          <span>© {yr} WizGrail. All rights reserved.</span>
-          <span className="footer__compliance">SOC 2 / ISO 27001 / DPDP / GDPR — controls in place; formal certifications in progress.</span>
+          <span>© {yr} WizGrail. All Rights Reserved.</span>
+          <span className="footer__compliance">AI Enablement for the Modern SME · SOC 2 / ISO 27001 / DPDP / GDPR controls in place.</span>
         </div>
       </div>
     </footer>
