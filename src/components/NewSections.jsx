@@ -119,39 +119,23 @@ function SlideBring({ s }) {
 
 const slideRenderers = { problem: SlideProblem, challenge: SlideChallenge, bring: SlideBring }
 
-const AUTOPLAY_MS = 7000
-
 export function StoryCarousel() {
   const [i, setI] = useState(0)
   const [dir, setDir] = useState(1)
-  const [paused, setPaused] = useState(false)
-  const [tick, setTick] = useState(0) // bumps to restart progress bar animation
   const reduce = useReducedMotion()
-  const sectionRef = useRef(null)
-  const inView = useInView(sectionRef, { amount: 0.3 })
   const touchX = useRef(0)
   const touchDX = useRef(0)
   const n = storySlides.length
 
-  const go = useCallback((next, userInitiated = false) => {
+  const go = useCallback((next) => {
     setDir(next > i || (i === n - 1 && next === 0) ? 1 : -1)
     setI(((next % n) + n) % n)
-    setTick((t) => t + 1)
-    if (userInitiated) setPaused(true)
   }, [i, n])
 
-  // Autoplay
-  useEffect(() => {
-    if (paused || reduce || !inView) return
-    const id = setTimeout(() => go(i + 1), AUTOPLAY_MS)
-    return () => clearTimeout(id)
-  }, [i, paused, reduce, inView, go, tick])
-
-  // Keyboard
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === 'ArrowRight') go(i + 1, true)
-      if (e.key === 'ArrowLeft') go(i - 1, true)
+      if (e.key === 'ArrowRight') go(i + 1)
+      if (e.key === 'ArrowLeft') go(i - 1)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -161,46 +145,27 @@ export function StoryCarousel() {
   const Renderer = slideRenderers[slide.key]
 
   const variants = {
-    enter: (d) => ({ opacity: 0, x: d * 80, scale: 0.94, rotateY: d * 4 }),
-    center: { opacity: 1, x: 0, scale: 1, rotateY: 0 },
-    exit: (d) => ({ opacity: 0, x: d * -80, scale: 0.94, rotateY: d * -4 }),
+    enter: (d) => ({ opacity: 0, x: d * 40 }),
+    center: { opacity: 1, x: 0 },
+    exit: (d) => ({ opacity: 0, x: d * -40 }),
   }
 
-  const autoplaying = !paused && !reduce && inView
-
   return (
-    <section className="section story-section" id="story" ref={sectionRef}>
+    <section className="section" id="story">
       <div className="container">
-        <Reveal as="header" className="section__head story-section__head">
-          <span className="tag">The story</span>
-          <h2 className="h2" style={{ marginTop: 12 }}>From challenge to answer in three beats.</h2>
-        </Reveal>
-
         <div
           className="story-carousel"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          onTouchStart={(e) => { touchX.current = e.touches[0].clientX; touchDX.current = 0; setPaused(true) }}
+          onTouchStart={(e) => { touchX.current = e.touches[0].clientX; touchDX.current = 0 }}
           onTouchMove={(e) => { touchDX.current = e.touches[0].clientX - touchX.current }}
           onTouchEnd={() => {
-            if (Math.abs(touchDX.current) > 50) go(i + (touchDX.current < 0 ? 1 : -1), true)
+            if (Math.abs(touchDX.current) > 50) go(i + (touchDX.current < 0 ? 1 : -1))
           }}
         >
-          <button
-            className="story-nav story-nav--prev"
-            aria-label="Previous slide"
-            onClick={() => go(i - 1, true)}
-          >
+          <button className="story-nav story-nav--prev" aria-label="Previous slide" onClick={() => go(i - 1)}>
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 6l-6 6 6 6" /></svg>
           </button>
 
-          <div className="story-stage" style={{ perspective: 1200 }}>
-            <div className="story-counter" aria-live="polite">
-              <span className="story-counter__cur">{String(i + 1).padStart(2, '0')}</span>
-              <span className="story-counter__sep">/</span>
-              <span className="story-counter__tot">{String(n).padStart(2, '0')}</span>
-            </div>
-
+          <div className="story-stage">
             <AnimatePresence custom={dir} mode="wait" initial={false}>
               <motion.div
                 key={slide.key}
@@ -209,63 +174,30 @@ export function StoryCarousel() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.55, ease }}
+                transition={{ duration: 0.4, ease }}
                 className="story-card"
-                style={{ transformStyle: 'preserve-3d' }}
               >
                 <Renderer s={slide} />
               </motion.div>
             </AnimatePresence>
           </div>
 
-          <button
-            className="story-nav story-nav--next"
-            aria-label="Next slide"
-            onClick={() => go(i + 1, true)}
-          >
+          <button className="story-nav story-nav--next" aria-label="Next slide" onClick={() => go(i + 1)}>
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6" /></svg>
           </button>
         </div>
 
-        <div className="story-controls">
-          <div className="story-tabs" role="tablist" aria-label="Story slides">
-            {storySlides.map((s, idx) => (
-              <button
-                key={s.key}
-                role="tab"
-                aria-selected={idx === i}
-                aria-label={`${s.eyebrow}: ${s.title}`}
-                className={`story-tab ${idx === i ? 'is-active' : ''}`}
-                onClick={() => go(idx, true)}
-              >
-                <span className="story-tab__num">{String(idx + 1).padStart(2, '0')}</span>
-                <span className="story-tab__label">{s.eyebrow}</span>
-                <span className="story-tab__bar">
-                  {idx === i && (
-                    <motion.span
-                      key={`bar-${i}-${tick}`}
-                      className="story-tab__fill"
-                      initial={{ width: '0%' }}
-                      animate={{ width: autoplaying ? '100%' : '0%' }}
-                      transition={{ duration: autoplaying ? AUTOPLAY_MS / 1000 : 0, ease: 'linear' }}
-                    />
-                  )}
-                </span>
-              </button>
-            ))}
-          </div>
-
-          <button
-            className="story-play"
-            aria-label={paused ? 'Resume autoplay' : 'Pause autoplay'}
-            onClick={() => setPaused((p) => !p)}
-          >
-            {paused ? (
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M7 5v14l12-7z" /></svg>
-            ) : (
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z" /></svg>
-            )}
-          </button>
+        <div className="story-dots" role="tablist" aria-label="Story slides">
+          {storySlides.map((s, idx) => (
+            <button
+              key={s.key}
+              role="tab"
+              aria-selected={idx === i}
+              aria-label={`Go to slide ${idx + 1}`}
+              className={`story-dot ${idx === i ? 'is-active' : ''}`}
+              onClick={() => go(idx)}
+            />
+          ))}
         </div>
       </div>
     </section>

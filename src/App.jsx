@@ -6,7 +6,7 @@ import {
   Integrate, Capabilities, About, AboutTeaser, AboutUsPage, Contact, Footer,
 } from './components/Sections'
 import {
-  StoryCarousel, Workflows, Industries, Timeline, Engagement, FAQ, Trust,
+  Workflows, Industries, Timeline, Engagement, FAQ, Trust,
 } from './components/NewSections'
 
 const pageEase = [0.22, 1, 0.36, 1]
@@ -52,7 +52,6 @@ export default function App() {
           ) : (
             <motion.div key="home" variants={pageVariants} initial="initial" animate="enter" exit="exit">
               <Hero />
-              <StoryCarousel />
               <Capabilities />
               <Workflows />
               <Integrate />

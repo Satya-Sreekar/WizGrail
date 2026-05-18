@@ -1,5 +1,5 @@
-import { useRef } from 'react'
-import { motion, useInView, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { motion, AnimatePresence, useInView, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
 
 const ease = [0.22, 1, 0.36, 1]
 
@@ -125,43 +125,148 @@ export default function Hero() {
 
         <motion.div
           className="hero__art"
-          aria-hidden="true"
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, ease, delay: 0.25 }}
         >
-          <motion.div
-            className="logo-card"
-            animate={looping ? { y: [0, -8, 0] } : { y: 0 }}
-            transition={{ duration: 6, repeat: looping ? Infinity : 0, ease: 'easeInOut' }}
-          >
-            <motion.div
-              className="logo-card__glow"
-              aria-hidden="true"
-              animate={looping ? { opacity: [0.5, 0.85, 0.5] } : { opacity: 0.6 }}
-              transition={{ duration: 4, repeat: looping ? Infinity : 0, ease: 'easeInOut' }}
-            />
-            <motion.img
-              className="logo-card__img"
-              src={`${import.meta.env.BASE_URL}assets/logo.png`}
-              alt=""
-              width="600"
-              height="338"
-              initial={{ opacity: 0, scale: 0.8, rotate: -8 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ duration: 0.9, ease, delay: 0.5 }}
-            />
-            <motion.div
-              className="logo-card__label"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease, delay: 0.85 }}
-            >
-              <span>AI ENABLER</span>
-            </motion.div>
-          </motion.div>
+          <HeroCarousel looping={looping} />
         </motion.div>
       </div>
     </section>
+  )
+}
+
+/* ---------- Hero carousel: slide 1 is the logo, then the story beats ---------- */
+function LogoSlide({ looping }) {
+  return (
+    <motion.div
+      className="logo-card hero-slide__inner"
+      animate={looping ? { y: [0, -8, 0] } : { y: 0 }}
+      transition={{ duration: 6, repeat: looping ? Infinity : 0, ease: 'easeInOut' }}
+    >
+      <motion.div
+        className="logo-card__glow"
+        aria-hidden="true"
+        animate={looping ? { opacity: [0.5, 0.85, 0.5] } : { opacity: 0.6 }}
+        transition={{ duration: 4, repeat: looping ? Infinity : 0, ease: 'easeInOut' }}
+      />
+      <img
+        className="logo-card__img"
+        src={`${import.meta.env.BASE_URL}assets/logo.png`}
+        alt="WizGrail"
+        width="600"
+        height="338"
+      />
+      <div className="logo-card__label">
+        <span>AI ENABLER</span>
+      </div>
+    </motion.div>
+  )
+}
+
+function StoryCard({ eyebrow, title, body, stat, statLabel }) {
+  return (
+    <div className="hero-slide__inner hero-story">
+      <div className="hero-story__glow" aria-hidden="true" />
+      <div className="hero-story__top">
+        <span className="hero-story__eyebrow">{eyebrow}</span>
+      </div>
+      <div className="hero-story__mid">
+        <h3 className="hero-story__title">{title}</h3>
+        <p className="hero-story__body">{body}</p>
+      </div>
+      <div className="hero-story__foot">
+        {stat ? (
+          <>
+            <strong>{stat}</strong>
+            <span>{statLabel}</span>
+          </>
+        ) : (
+          <span className="hero-story__hint">Swipe or use the dots to continue →</span>
+        )}
+      </div>
+    </div>
+  )
+}
+
+const heroSlides = [
+  { key: 'logo' },
+  { key: 'problem', eyebrow: 'The problem', title: 'Your systems work — but hard enough?', body: 'Competition is faster, customers expect more, and most of your data never reaches a decision.' },
+  { key: 'challenge', eyebrow: 'The challenge', title: 'Legacy systems are valuable.', body: 'Replacing what already works is expensive, risky, and disruptive.', stat: '3–5×', statLabel: 'more cost & time vs. layering AI on top' },
+  { key: 'answer', eyebrow: 'The answer', title: 'Bring AI to what already works.', body: 'A practical AI platform that integrates with your existing applications, enhancing them without altering their core.' },
+]
+
+function HeroCarousel({ looping }) {
+  const [i, setI] = useState(0)
+  const [dir, setDir] = useState(1)
+  const reduce = useReducedMotion()
+  const touchX = useRef(0)
+  const touchDX = useRef(0)
+  const n = heroSlides.length
+
+  const go = useCallback((next) => {
+    setDir(next > i || (i === n - 1 && next === 0) ? 1 : -1)
+    setI(((next % n) + n) % n)
+  }, [i, n])
+
+  // light autoplay on hero only
+  useEffect(() => {
+    if (reduce) return
+    const id = setTimeout(() => go(i + 1), 5500)
+    return () => clearTimeout(id)
+  }, [i, reduce, go])
+
+  const variants = {
+    enter: (d) => ({ opacity: 0, x: d * 30 }),
+    center: { opacity: 1, x: 0 },
+    exit: (d) => ({ opacity: 0, x: d * -30 }),
+  }
+
+  const s = heroSlides[i]
+
+  return (
+    <div
+      className="hero-carousel"
+      onTouchStart={(e) => { touchX.current = e.touches[0].clientX; touchDX.current = 0 }}
+      onTouchMove={(e) => { touchDX.current = e.touches[0].clientX - touchX.current }}
+      onTouchEnd={() => { if (Math.abs(touchDX.current) > 40) go(i + (touchDX.current < 0 ? 1 : -1)) }}
+    >
+      <div className="hero-slide">
+        <AnimatePresence custom={dir} mode="wait" initial={false}>
+          <motion.div
+            key={s.key}
+            custom={dir}
+            variants={reduce ? {} : variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="hero-slide__motion"
+          >
+            {s.key === 'logo' ? <LogoSlide looping={looping} /> : <StoryCard {...s} />}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <button className="hero-arrow hero-arrow--prev" aria-label="Previous slide" onClick={() => go(i - 1)}>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 6l-6 6 6 6" /></svg>
+      </button>
+      <button className="hero-arrow hero-arrow--next" aria-label="Next slide" onClick={() => go(i + 1)}>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+      </button>
+
+      <div className="hero-dots" role="tablist" aria-label="Hero slides">
+        {heroSlides.map((sl, idx) => (
+          <button
+            key={sl.key}
+            role="tab"
+            aria-selected={idx === i}
+            aria-label={`Slide ${idx + 1}`}
+            className={`hero-dot ${idx === i ? 'is-active' : ''}`}
+            onClick={() => go(idx)}
+          />
+        ))}
+      </div>
+    </div>
   )
 }
