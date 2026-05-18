@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
 import {
-  Integrate, Capabilities, About, AboutTeaser, AboutUsPage, Contact, Footer,
+  Integrate, Capabilities, About, AboutTeaser, AboutUsPage, Contact, FinalCTA, Footer,
 } from './components/Sections'
 import {
   Workflows, Industries, Timeline, Engagement, FAQ, Trust,
@@ -62,6 +62,7 @@ export default function App() {
               <Engagement />
               <Trust />
               <FAQ />
+              <FinalCTA />
               <Contact />
             </motion.div>
           )}

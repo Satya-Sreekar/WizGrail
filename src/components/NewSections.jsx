@@ -285,37 +285,106 @@ export function Workflows() {
 
 /* ---------- Industries ---------- */
 const industries = [
-  { name: 'Manufacturing', body: 'Production planning, quality, supplier intelligence.' },
-  { name: 'Retail & E-commerce', body: 'Demand forecasting, dynamic pricing, search relevance.' },
-  { name: 'Logistics', body: 'Routing, ETA prediction, exception handling.' },
-  { name: 'Healthcare', body: 'Documentation, scheduling, clinical-decision support.' },
-  { name: 'Financial services', body: 'Risk scoring, KYC automation, document review.' },
-  { name: 'Professional services', body: 'Knowledge retrieval, drafting, billable-hour reclaim.' },
+  {
+    name: 'Manufacturing',
+    tagline: 'Production planning, quality, supplier intelligence.',
+    body: 'Layer AI on top of MES and ERP to forecast demand, surface quality drift early, and rank suppliers by real performance — without touching the systems that already run the shop floor.',
+    uses: ['Demand forecasting on existing ERP data', 'Quality anomaly detection from line telemetry', 'Supplier scorecards and reorder suggestions'],
+    metric: { v: '38%', l: 'fewer emergency reorders in 90 days' },
+  },
+  {
+    name: 'Retail & E-commerce',
+    tagline: 'Demand forecasting, dynamic pricing, search relevance.',
+    body: 'Integrate with your existing storefront, OMS, and POS to forecast SKU demand, tune prices in policy-safe bands, and improve on-site search and recommendations.',
+    uses: ['SKU-level demand forecasting', 'Guard-railed dynamic pricing', 'Search & recommendation tuning'],
+    metric: { v: '12%', l: 'lift in conversion from search relevance' },
+  },
+  {
+    name: 'Logistics',
+    tagline: 'Routing, ETA prediction, exception handling.',
+    body: 'Augment your TMS with predictive ETAs, automated exception triage, and route optimisation that respects driver, vehicle, and SLA constraints already encoded in your stack.',
+    uses: ['Predictive ETAs across modes', 'Auto-triaged exceptions and re-routes', 'SLA-aware route optimisation'],
+    metric: { v: '22%', l: 'reduction in late deliveries' },
+  },
+  {
+    name: 'Healthcare',
+    tagline: 'Documentation, scheduling, clinical-decision support.',
+    body: 'On top of EHR and scheduling systems: ambient documentation, intelligent scheduling, and decision-support that surfaces evidence at the point of care — privacy-first by design.',
+    uses: ['Ambient clinical documentation', 'Intelligent appointment scheduling', 'Evidence-linked decision support'],
+    metric: { v: '5 h', l: 'returned to each clinician per week' },
+  },
+  {
+    name: 'Financial services',
+    tagline: 'Risk scoring, KYC automation, document review.',
+    body: 'Compliance-grade automation on top of your core banking, CRM, and document platforms — risk scoring, KYC orchestration, and contract review with full audit trail.',
+    uses: ['Risk scoring with explainability', 'KYC/AML document orchestration', 'Contract & policy review at scale'],
+    metric: { v: '70%', l: 'faster KYC turnaround' },
+  },
+  {
+    name: 'Professional services',
+    tagline: 'Knowledge retrieval, drafting, billable-hour reclaim.',
+    body: 'Knowledge retrieval grounded in your firm\'s documents, drafting assistants tuned to your style, and time-capture that reclaims billable hours from admin overhead.',
+    uses: ['Firm-grounded knowledge retrieval', 'Voice-of-firm drafting assistants', 'Auto time capture from work signals'],
+    metric: { v: '8 h', l: 'reclaimed weekly per fee-earner' },
+  },
 ]
 
 export function Industries() {
+  const [active, setActive] = useState(0)
+  const current = industries[active]
+
   return (
     <section className="section section--alt" id="industries">
       <div className="container">
         <Reveal as="header" className="section__head">
           <h2 className="h2">Industries we work with</h2>
-          <p className="sub">We are not vertical-locked — but these are the domains where our team has the most reps.</p>
+          <p className="sub">We are not vertical-locked — but these are the domains where our team has the most reps. Pick one to see how WizGrail fits.</p>
         </Reveal>
 
-        <motion.div
-          className="industries"
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.15 }}
-          variants={stagger(0.06)}
-        >
-          {industries.map((i) => (
-            <motion.div key={i.name} className="industry" variants={fadeUp} {...cardHover}>
-              <h4>{i.name}</h4>
-              <p>{i.body}</p>
-            </motion.div>
+        <div className="ind-tabs" role="tablist" aria-label="Industries">
+          {industries.map((ind, idx) => (
+            <button
+              key={ind.name}
+              role="tab"
+              aria-selected={idx === active}
+              aria-controls="ind-panel"
+              className={`ind-tab ${idx === active ? 'is-active' : ''}`}
+              onClick={() => setActive(idx)}
+            >
+              <span className="ind-tab__num">{String(idx + 1).padStart(2, '0')}</span>
+              {ind.name}
+            </button>
           ))}
-        </motion.div>
+        </div>
+
+        <div className="ind-panel" id="ind-panel" role="tabpanel">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={current.name}
+              className="ind-panel__grid"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.35, ease }}
+            >
+              <div className="ind-panel__copy">
+                <span className="tag">{current.name}</span>
+                <h3 className="ind-panel__h">{current.tagline}</h3>
+                <p className="ind-panel__body">{current.body}</p>
+                <ul className="ind-panel__uses">
+                  {current.uses.map((u) => (
+                    <li key={u}>{u}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="ind-panel__metric">
+                <strong>{current.metric.v}</strong>
+                <span>{current.metric.l}</span>
+                <a className="bare bare--accent" href="#contact">Talk to us about {current.name.toLowerCase()} →</a>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </section>
   )

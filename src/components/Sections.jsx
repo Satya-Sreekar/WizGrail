@@ -266,6 +266,35 @@ const pillars = [
   { Icon: BarsIcon, title: 'Measurable impact', body: 'Every deployment is tied to outcomes — productivity, decisions, and ROI you can track.' },
 ]
 
+export function FinalCTA() {
+  return (
+    <section className="section final-cta-section">
+      <div className="container">
+        <Reveal className="final-cta">
+          <div className="final-cta__glow" aria-hidden="true" />
+          <div className="final-cta__copy">
+            <h2 className="h2 h2--light" style={{ margin: 0 }}>Accelerate your AI advantage.</h2>
+            <p className="lede lede--light" style={{ margin: '8px 0 0', maxWidth: '52ch' }}>
+              A 30-minute call, a 4–8 week pilot, measurable impact on your existing stack.
+            </p>
+          </div>
+          <motion.a
+            href="https://wa.me/919951389007"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn--primary btn--lg"
+            whileHover={{ y: -2 }}
+            whileTap={{ y: 0, scale: 0.98 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+          >
+            Talk to an expert →
+          </motion.a>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
 export function AboutTeaser() {
   return (
     <section className="section about-teaser-section">
