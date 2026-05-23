@@ -171,6 +171,37 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--orange);outline-off
 .section--alt{background:var(--cream-2)}
 .section--dark{background:linear-gradient(160deg,#1a0d3a 0%,#2d1b69 60%,#4c1d95 100%);color:#fff}
 .section__head{max-width:720px;margin-bottom:clamp(28px,5vw,44px)}
+.section__accent{
+  display:block;width:56px;height:3px;border-radius:2px;margin-top:18px;
+  background:linear-gradient(90deg,var(--orange),var(--orange-2));
+  transform-origin:left center;will-change:transform;
+}
+
+/* Mouse-tracked spotlight overlay for cards.
+   Sits as a non-interactive pseudo above the card surface; the card
+   sets --mx/--my via onMouseMove (see Spotlight + card components). */
+.workflow, .security, .trust, .engage, .contact-card, .ind-panel{
+  --mx:50%; --my:0%;
+  position:relative;isolation:isolate;
+}
+.workflow::after, .security::after, .trust::after, .engage::after, .contact-card::after, .ind-panel::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;
+  background:radial-gradient(220px circle at var(--mx) var(--my),rgba(124,58,237,.12),transparent 65%);
+  opacity:0;transition:opacity .35s ease;pointer-events:none;z-index:0;
+}
+.workflow:hover::after, .security:hover::after, .trust:hover::after, .engage:hover::after, .contact-card:hover::after{opacity:1}
+.workflow > *, .security > *, .trust > *, .engage > *, .contact-card > *{position:relative;z-index:1}
+
+/* Brand mark gentle idle pulse */
+@keyframes brandPulse{
+  0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 rgba(124,58,237,0))}
+  50%{transform:scale(1.04);filter:drop-shadow(0 4px 14px rgba(124,58,237,.35))}
+}
+.brand__mark img{animation:brandPulse 6s ease-in-out infinite;will-change:transform,filter}
+@media (prefers-reduced-motion: reduce){
+  .brand__mark img{animation:none}
+  .section__accent{transform:none !important}
+}
 
 .steps{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(1,1fr);gap:18px}
 @media (min-width:680px){.steps{grid-template-columns:repeat(2,1fr)}}

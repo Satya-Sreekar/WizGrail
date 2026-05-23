@@ -33,10 +33,42 @@ function useRoute() {
   return route
 }
 
+const SPOTLIGHT_SELECTOR = '.workflow, .security, .trust, .engage, .contact-card, .ind-panel'
+
+function useSpotlight() {
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (window.matchMedia('(hover: none)').matches) return
+    let raf = 0
+    let pending = null
+    const flush = () => {
+      raf = 0
+      if (!pending) return
+      const { el, x, y } = pending
+      el.style.setProperty('--mx', `${x}%`)
+      el.style.setProperty('--my', `${y}%`)
+      pending = null
+    }
+    const onMove = (e) => {
+      const el = e.target.closest && e.target.closest(SPOTLIGHT_SELECTOR)
+      if (!el) return
+      const r = el.getBoundingClientRect()
+      pending = { el, x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 }
+      if (!raf) raf = requestAnimationFrame(flush)
+    }
+    document.addEventListener('mousemove', onMove, { passive: true })
+    return () => {
+      document.removeEventListener('mousemove', onMove)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [])
+}
+
 export default function App() {
   const { scrollYProgress } = useScroll()
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 25, mass: 0.3 })
   const route = useRoute()
+  useSpotlight()
 
   return (
     <>
