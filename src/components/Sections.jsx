@@ -187,9 +187,24 @@ export function Capabilities() {
           viewport={{ once: true, amount: 0.15 }}
           variants={stagger(0.08)}
         >
-          {caps.map(({ Icon, title, body }) => (
-            <motion.article key={title} className="cap" variants={fadeUp} {...cardHover}>
-              <div className="cap__icon"><Icon /></div>
+          {caps.map(({ Icon, title, body }, i) => (
+            <motion.article
+              key={title}
+              className="cap cap--anim"
+              variants={fadeUp}
+              whileHover={{ y: -6 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+            >
+              <motion.div
+                className="cap__icon"
+                initial={{ scale: 0.7, rotate: -12 }}
+                whileInView={{ scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ type: 'spring', stiffness: 280, damping: 16, delay: 0.1 + i * 0.05 }}
+                whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.5 } }}
+              >
+                <Icon />
+              </motion.div>
               <h3>{title}</h3>
               <p>{body}</p>
             </motion.article>
@@ -279,15 +294,20 @@ export function FinalCTA() {
             </p>
           </div>
           <motion.a
-            href="https://wa.me/919951389007"
+            href="https://wa.me/916303165038"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn--primary btn--lg"
-            whileHover={{ y: -2 }}
+            className="btn btn--primary btn--lg arrow-cta"
+            whileHover="hover"
             whileTap={{ y: 0, scale: 0.98 }}
             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
           >
-            Talk to an expert →
+            <span>Talk to an expert</span>
+            <motion.span
+              className="arrow-cta__arrow"
+              variants={{ hover: { x: 6 } }}
+              transition={{ type: 'spring', stiffness: 350, damping: 18 }}
+            >→</motion.span>
           </motion.a>
         </Reveal>
       </div>
@@ -574,7 +594,7 @@ export function AboutUsPage() {
             <p className="sub">Talk to our team about a 4–8 week pilot tailored to your existing systems.</p>
             <div className="cta__buttons" style={{ marginTop: 22 }}>
               <motion.a
-                href="https://wa.me/919951389007"
+                href="https://wa.me/916303165038"
                 className="btn btn--primary btn--lg"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -612,8 +632,8 @@ export function Contact() {
               <div className="contact-card__icon" aria-hidden="true"><WhatsAppIcon /></div>
               <div>
                 <h3>WhatsApp / Phone</h3>
-                <p><a className="bare" href="tel:+919951389007">+91 99513 89007</a></p>
-                <a className="bare bare--accent" href="https://wa.me/919951389007" target="_blank" rel="noopener noreferrer">Chat on WhatsApp →</a>
+                <p><a className="bare" href="tel:+916303165038">+91 63031 65038</a></p>
+                <a className="bare bare--accent" href="https://wa.me/916303165038" target="_blank" rel="noopener noreferrer">Chat on WhatsApp →</a>
               </div>
             </motion.div>
 
@@ -644,7 +664,7 @@ export function Contact() {
 
           <div className="cta__buttons">
             <motion.a
-              href="https://wa.me/919951389007"
+              href="https://wa.me/916303165038"
               className="btn btn--primary btn--lg"
               target="_blank"
               rel="noopener noreferrer"
@@ -665,7 +685,13 @@ export function Contact() {
 export function Footer() {
   const yr = new Date().getFullYear()
   return (
-    <footer className="footer">
+    <motion.footer
+      className="footer"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="container">
         <div className="footer__top">
           <div className="footer__brand">
@@ -674,7 +700,7 @@ export function Footer() {
               <span className="brand__name">WizGrail<span className="brand__sub">AI Enabler</span></span>
             </a>
             <p>AI that integrates with the systems your business already runs. No rip-and-replace, no migration, no platform lock-in.</p>
-            <a className="btn btn--primary" href="https://wa.me/919951389007" target="_blank" rel="noopener noreferrer">
+            <a className="btn btn--primary" href="https://wa.me/916303165038" target="_blank" rel="noopener noreferrer">
               Book a discovery call
             </a>
           </div>
@@ -696,8 +722,8 @@ export function Footer() {
             </div>
             <div className="footer__col">
               <h5>Get in touch</h5>
-              <a href="tel:+919951389007">+91 99513 89007</a>
-              <a href="https://wa.me/919951389007" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+              <a href="tel:+916303165038">+91 63031 65038</a>
+              <a href="https://wa.me/916303165038" target="_blank" rel="noopener noreferrer">WhatsApp</a>
               <a href="mailto:hello@wizgrail.com">hello@wizgrail.com</a>
               <span className="footer__hours">Mon–Fri · IST · 1-day reply</span>
             </div>
@@ -709,6 +735,6 @@ export function Footer() {
           <span className="footer__compliance">AI Enablement for the Modern SME · SOC 2 / ISO 27001 / DPDP / GDPR controls in place.</span>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   )
 }

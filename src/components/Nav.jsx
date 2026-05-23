@@ -49,11 +49,18 @@ export default function Nav() {
 
         <nav className="nav__links" aria-label="Primary">
           {links.map((l) => (
-            <a key={l.href} href={l.href}>{l.label}</a>
+            <motion.a key={l.href} href={l.href} className="nav__link" whileHover="hover" initial="rest" animate="rest">
+              {l.label}
+              <motion.span
+                className="nav__link-underline"
+                variants={{ rest: { scaleX: 0 }, hover: { scaleX: 1 } }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              />
+            </motion.a>
           ))}
           <a href="#contact" className="btn btn--ghost">Contact</a>
           <a
-            href="https://wa.me/919951389007"
+            href="https://wa.me/916303165038"
             className="btn btn--primary"
             target="_blank"
             rel="noopener noreferrer"
@@ -104,7 +111,7 @@ export default function Nav() {
             ))}
             <a href="#contact" onClick={() => setOpen(false)}>Contact</a>
             <a
-              href="https://wa.me/919951389007"
+              href="https://wa.me/916303165038"
               className="btn btn--primary"
               target="_blank"
               rel="noopener noreferrer"

@@ -164,10 +164,193 @@ function LogoSlide({ looping }) {
   )
 }
 
-function StoryCard({ eyebrow, title, body, stat, statLabel }) {
+const artEase = [0.22, 1, 0.36, 1]
+const artContainerV = {
+  enter: { opacity: 1 },
+  center: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.22 } },
+  exit: { opacity: 1, transition: { staggerChildren: 0.04, staggerDirection: -1 } },
+}
+const artItemV = {
+  enter: { opacity: 0, y: 10, scale: 0.88 },
+  center: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: artEase } },
+  exit: { opacity: 0, y: 6, scale: 0.94, transition: { duration: 0.22, ease: artEase } },
+}
+const artItemAccent = {
+  enter: { opacity: 0, scale: 0 },
+  center: { opacity: 1, scale: 1, transition: { duration: 0.45, ease: [0.34, 1.56, 0.64, 1], delay: 0.05 } },
+  exit: { opacity: 0, scale: 0.6, transition: { duration: 0.18 } },
+}
+
+function HeroSlideArt({ kind }) {
+  const reduce = useReducedMotion()
+  const containerV = reduce ? {} : artContainerV
+  const itemV = reduce ? {} : artItemV
+  const accentV = reduce ? {} : artItemAccent
+  const stroke = 'rgba(212,197,255,.75)'
+  const dim = 'rgba(212,197,255,.35)'
+  const sparkle = (cx, cy, r = 2.2, opacity = 1) => (
+    <path
+      d={`M${cx} ${cy - r * 2}l${r * 0.6} ${r * 1.4}L${cx + r * 2} ${cy}l${-r * 1.4} ${r * 0.6}L${cx} ${cy + r * 2}l${-r * 0.6} ${-r * 1.4}L${cx - r * 2} ${cy}l${r * 1.4} ${-r * 0.6}z`}
+      fill="#fbbf24"
+      opacity={opacity}
+    />
+  )
+
+  if (kind === 'problem') {
+    // 3 data silos in a row, with tiny floating data dots above
+    return (
+      <motion.svg
+        className="hero-story__art"
+        viewBox="0 0 130 80"
+        fill="none"
+        aria-hidden="true"
+        variants={containerV}
+      >
+        <defs>
+          <linearGradient id="hsa-p" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#a78bfa" stopOpacity=".22" />
+            <stop offset="100%" stopColor="#7c3aed" stopOpacity=".04" />
+          </linearGradient>
+        </defs>
+        {/* tiny floating data dots (representing unused/scattered data) */}
+        <motion.g variants={itemV} style={{ transformOrigin: '65px 10px' }} fill="#d4c5ff">
+          <circle cx="18" cy="10" r="1.2" opacity=".55" />
+          <circle cx="34" cy="6" r="1" opacity=".4" />
+          <circle cx="56" cy="12" r="1.2" opacity=".5" />
+          <circle cx="74" cy="8" r="1" opacity=".4" />
+          <circle cx="96" cy="14" r="1.2" opacity=".55" />
+          <circle cx="114" cy="9" r="1" opacity=".4" />
+        </motion.g>
+        {[0, 1, 2].map((i) => (
+          <g key={i} transform={`translate(${10 + i * 38} 28)`}>
+            <motion.g variants={itemV} style={{ transformOrigin: '14px 25px' }}>
+              <ellipse cx="14" cy="5" rx="14" ry="4" fill="url(#hsa-p)" stroke={stroke} strokeWidth=".9" />
+              <path d="M0 5v36c0 2.2 6 4 14 4s14-1.8 14-4V5" fill="url(#hsa-p)" stroke={stroke} strokeWidth=".9" />
+              <path d="M0 18c0 2.2 6 4 14 4s14-1.8 14-4" stroke={dim} strokeWidth=".8" />
+              <path d="M0 30c0 2.2 6 4 14 4s14-1.8 14-4" stroke={dim} strokeWidth=".8" />
+            </motion.g>
+          </g>
+        ))}
+        {/* single subtle amber spark above the middle silo */}
+        <motion.g variants={accentV} style={{ transformOrigin: '65px 4px' }}>
+          {sparkle(65, 4, 2, 0.75)}
+        </motion.g>
+      </motion.svg>
+    )
+  }
+
+  if (kind === 'challenge') {
+    // Clean stacked legacy layers with a small outlined lock floating above
+    return (
+      <motion.svg
+        className="hero-story__art"
+        viewBox="0 0 130 90"
+        fill="none"
+        aria-hidden="true"
+        variants={containerV}
+      >
+        <defs>
+          <linearGradient id="hsa-c" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#a78bfa" stopOpacity=".22" />
+            <stop offset="100%" stopColor="#7c3aed" stopOpacity=".04" />
+          </linearGradient>
+        </defs>
+        {[0, 1, 2].map((i) => (
+          <g key={i} transform={`translate(${10 + i * 4} ${66 - i * 18})`}>
+            <motion.g variants={itemV} style={{ transformOrigin: '46px 8px' }}>
+              <rect width="92" height="16" rx="4" fill="url(#hsa-c)" stroke={stroke} strokeWidth=".9" />
+              <circle cx="9" cy="8" r="2" fill="#d4c5ff" opacity=".75" />
+              <rect x="17" y="5" width="34" height="2.4" rx="1.2" fill="#d4c5ff" opacity=".45" />
+              <rect x="17" y="9.6" width="54" height="2.4" rx="1.2" fill="#d4c5ff" opacity=".22" />
+            </motion.g>
+          </g>
+        ))}
+        {/* small outlined lock — refined, no solid fill */}
+        <motion.g
+          variants={accentV}
+          style={{ transformOrigin: '107px 19px' }}
+          transform="translate(96 8)"
+          fill="none"
+          stroke="#fbbf24"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          opacity=".9"
+        >
+          <rect x="2" y="9" width="18" height="14" rx="2.5" />
+          <path d="M5.5 9V5.5a5.5 5.5 0 0 1 11 0V9" />
+          <circle cx="11" cy="16" r="1.5" fill="#fbbf24" />
+        </motion.g>
+      </motion.svg>
+    )
+  }
+
+  if (kind === 'answer') {
+    // AI layer sitting on top of an existing stack — outlined "AI" chip, not loud
+    return (
+      <motion.svg
+        className="hero-story__art"
+        viewBox="0 0 130 80"
+        fill="none"
+        aria-hidden="true"
+        variants={containerV}
+      >
+        <defs>
+          <linearGradient id="hsa-a" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#a78bfa" stopOpacity=".22" />
+            <stop offset="100%" stopColor="#7c3aed" stopOpacity=".04" />
+          </linearGradient>
+          <linearGradient id="hsa-ai" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#fbbf24" stopOpacity=".18" />
+            <stop offset="100%" stopColor="#f59e0b" stopOpacity=".08" />
+          </linearGradient>
+        </defs>
+        {/* existing stack — 3 layers (entry order: stack first) */}
+        {[0, 1, 2].map((i) => (
+          <g key={i} transform={`translate(14 ${44 + i * 11})`}>
+            <motion.g variants={itemV} style={{ transformOrigin: '51px 5px' }}>
+              <rect width="102" height="9" rx="3" fill="url(#hsa-a)" stroke={stroke} strokeWidth=".8" />
+              <rect x="7" y="3.5" width="22" height="2" rx="1" fill="#d4c5ff" opacity=".45" />
+              <rect x="33" y="3.5" width="46" height="2" rx="1" fill="#d4c5ff" opacity=".22" />
+            </motion.g>
+          </g>
+        ))}
+        {/* connector down (appears after stack) */}
+        <motion.g
+          variants={itemV}
+          style={{ transformOrigin: '65px 33px' }}
+          transform="translate(65 28)"
+          stroke={stroke}
+          strokeWidth="1"
+          fill="none"
+          strokeLinecap="round"
+        >
+          <path d="M0 0v10" />
+          <path d="M-3 7l3 3 3-3" />
+        </motion.g>
+        {/* AI layer — drops in last */}
+        <motion.g
+          variants={accentV}
+          style={{ transformOrigin: '65px 15px' }}
+          transform="translate(14 6)"
+        >
+          <rect width="102" height="18" rx="9" fill="url(#hsa-ai)" stroke="#fbbf24" strokeWidth="1" opacity=".95" />
+          <text x="51" y="12.5" textAnchor="middle" fontFamily="Inter,sans-serif" fontSize="9" fontWeight="700" fill="#fbbf24" letterSpacing="2.5">AI LAYER</text>
+        </motion.g>
+        <motion.g variants={accentV} style={{ transformOrigin: '118px 6px' }}>
+          {sparkle(118, 6, 1.8, 0.8)}
+        </motion.g>
+      </motion.svg>
+    )
+  }
+  return null
+}
+
+function StoryCard({ eyebrow, title, body, stat, statLabel, art }) {
   return (
     <div className="hero-slide__inner hero-story">
       <div className="hero-story__glow" aria-hidden="true" />
+      {art ? <HeroSlideArt kind={art} /> : null}
       <div className="hero-story__top">
         <span className="hero-story__eyebrow">{eyebrow}</span>
       </div>
@@ -191,9 +374,9 @@ function StoryCard({ eyebrow, title, body, stat, statLabel }) {
 
 const heroSlides = [
   { key: 'logo' },
-  { key: 'problem', eyebrow: 'The problem', title: 'Your systems work — but hard enough?', body: 'Competition is faster, customers expect more, and most of your data never reaches a decision.' },
-  { key: 'challenge', eyebrow: 'The challenge', title: 'Legacy systems are valuable.', body: 'Replacing what already works is expensive, risky, and disruptive.', stat: '3–5×', statLabel: 'more cost & time vs. layering AI on top' },
-  { key: 'answer', eyebrow: 'The answer', title: 'Bring AI to what already works.', body: 'A practical AI platform that integrates with your existing applications, enhancing them without altering their core.' },
+  { key: 'problem', art: 'problem', eyebrow: 'The problem', title: 'Your systems work — but hard enough?', body: 'Competition is faster, customers expect more, and most of your data never reaches a decision.' },
+  { key: 'challenge', art: 'challenge', eyebrow: 'The challenge', title: 'Legacy systems are valuable.', body: 'Replacing what already works is expensive, risky, and disruptive.', stat: '3–5×', statLabel: 'more cost & time vs. layering AI on top' },
+  { key: 'answer', art: 'answer', eyebrow: 'The answer', title: 'Bring AI to what already works.', body: 'A practical AI platform that integrates with your existing applications, enhancing them without altering their core.' },
 ]
 
 function HeroCarousel({ looping }) {
@@ -212,7 +395,7 @@ function HeroCarousel({ looping }) {
   // light autoplay on hero only
   useEffect(() => {
     if (reduce) return
-    const id = setTimeout(() => go(i + 1), 5500)
+    const id = setTimeout(() => go(i + 1), i === 0 ? 1500 : 5500)
     return () => clearTimeout(id)
   }, [i, reduce, go])
 

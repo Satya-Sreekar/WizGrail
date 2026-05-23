@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, useInView, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
+import { motion, AnimatePresence, useInView, useMotionValue, useSpring, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Reveal, { fadeUp, stagger } from './Reveal'
 
@@ -6,6 +6,20 @@ const ease = [0.22, 1, 0.36, 1]
 const cardHover = { whileHover: { y: -4 }, transition: { type: 'spring', stiffness: 350, damping: 25 } }
 
 /* ---------- Story carousel (Problem → Challenge → Bring) ---------- */
+const PointIcon = ({ name }) => {
+  const common = { width: 28, height: 28, viewBox: '0 0 32 32', fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round' }
+  if (name === 'speed') return (
+    <svg {...common}><path d="M6 22a10 10 0 1 1 20 0" /><path d="M16 22l5-7" /><circle cx="16" cy="22" r="1.4" fill="currentColor" stroke="none" /><path d="M5 26h22" opacity=".4" /></svg>
+  )
+  if (name === 'sparkle') return (
+    <svg {...common}><path d="M16 5v6M16 21v6M5 16h6M21 16h6" /><path d="M9 9l3 3M20 20l3 3M9 23l3-3M20 12l3-3" opacity=".5" /><circle cx="16" cy="16" r="2.2" /></svg>
+  )
+  if (name === 'data') return (
+    <svg {...common}><ellipse cx="16" cy="9" rx="9" ry="3" /><path d="M7 9v6c0 1.7 4 3 9 3s9-1.3 9-3V9" /><path d="M7 15v6c0 1.7 4 3 9 3s9-1.3 9-3v-6" opacity=".55" /></svg>
+  )
+  return null
+}
+
 const storySlides = [
   {
     key: 'problem',
@@ -13,9 +27,9 @@ const storySlides = [
     title: 'Your systems work — but are they working hard enough?',
     body: 'Competition is faster, customers expect more, and the data you already collect mostly sits in silos. The bar has moved.',
     points: [
-      { h: 'Faster competition', p: 'Competitors are automating at speed and shortening the gap on response, pricing, and service.' },
-      { h: 'Smarter expectations', p: 'Customers now expect quick, personalised, intelligent experiences as a baseline.' },
-      { h: 'Underused data', p: 'The data you collect is growing, but most of it rarely informs a decision.' },
+      { icon: 'speed', h: 'Faster competition', p: 'Competitors are automating at speed and shortening the gap on response, pricing, and service.' },
+      { icon: 'sparkle', h: 'Smarter expectations', p: 'Customers now expect quick, personalised, intelligent experiences as a baseline.' },
+      { icon: 'data', h: 'Underused data', p: 'The data you collect is growing, but most of it rarely informs a decision.' },
     ],
     tone: 'light',
   },
@@ -51,6 +65,7 @@ function SlideProblem({ s }) {
       <div className="story-points">
         {s.points.map((p) => (
           <div key={p.h} className="story-point">
+            <div className="story-point__icon" aria-hidden="true"><PointIcon name={p.icon} /></div>
             <h4>{p.h}</h4>
             <p>{p.p}</p>
           </div>
@@ -60,12 +75,54 @@ function SlideProblem({ s }) {
   )
 }
 
+function LegacyArt() {
+  return (
+    <svg
+      className="legacy-art"
+      viewBox="0 0 220 180"
+      fill="none"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="lg-block" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#a78bfa" stopOpacity=".25" />
+          <stop offset="100%" stopColor="#7c3aed" stopOpacity=".05" />
+        </linearGradient>
+        <linearGradient id="lg-edge" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#d4c5ff" stopOpacity=".7" />
+          <stop offset="100%" stopColor="#d4c5ff" stopOpacity=".25" />
+        </linearGradient>
+      </defs>
+      {[0, 1, 2].map((i) => (
+        <g key={i} transform={`translate(${20 + i * 6} ${110 - i * 28})`}>
+          <rect width="160" height="34" rx="6" fill="url(#lg-block)" stroke="url(#lg-edge)" strokeWidth="1" />
+          <circle cx="14" cy="17" r="3.5" fill="#d4c5ff" opacity=".8" />
+          <rect x="26" y="11" width="60" height="4" rx="2" fill="#d4c5ff" opacity=".55" />
+          <rect x="26" y="19" width="90" height="4" rx="2" fill="#d4c5ff" opacity=".3" />
+        </g>
+      ))}
+      <g transform="translate(150 30)">
+        <rect x="2" y="14" width="32" height="26" rx="4" fill="#1a0d3a" stroke="#fbbf24" strokeWidth="1.4" />
+        <path d="M8 14v-5a10 10 0 0 1 20 0v5" stroke="#fbbf24" strokeWidth="1.4" fill="none" />
+        <circle cx="18" cy="27" r="3" fill="#fbbf24" />
+        <path d="M18 30v4" stroke="#fbbf24" strokeWidth="1.4" />
+      </g>
+    </svg>
+  )
+}
+
 function SlideChallenge({ s }) {
   return (
-    <div className="story-slide story-slide--dark">
-      <span className="tag tag--light">{s.eyebrow}</span>
-      <h2 className="h2 h2--light" style={{ marginTop: 12 }}>{s.title}</h2>
-      <p className="lede lede--light">{s.body}</p>
+    <div className="story-slide story-slide--dark story-slide--challenge">
+      <div className="story-slide__head">
+        <div>
+          <span className="tag tag--light">{s.eyebrow}</span>
+          <h2 className="h2 h2--light" style={{ marginTop: 12 }}>{s.title}</h2>
+          <p className="lede lede--light">{s.body}</p>
+        </div>
+        <LegacyArt />
+      </div>
       <blockquote className="quote">{s.quote}</blockquote>
       <div className="story-stats">
         {s.stats.map((st) => (
@@ -399,6 +456,13 @@ const phases = [
 ]
 
 export function Timeline() {
+  const timelineRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: timelineRef, offset: ['start 80%', 'end 30%'] })
+  const railFill = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
+  return TimelineInner({ timelineRef, railFill })
+}
+
+function TimelineInner({ timelineRef, railFill }) {
   return (
     <section className="section" id="process">
       <div className="container">
@@ -408,12 +472,16 @@ export function Timeline() {
         </Reveal>
 
         <motion.ol
-          className="timeline"
+          ref={timelineRef}
+          className="timeline timeline--anim"
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.1 }}
           variants={stagger(0.12)}
         >
+          <span className="timeline__track" aria-hidden="true">
+            <motion.span className="timeline__fill" style={{ height: railFill }} />
+          </span>
           {phases.map((p, i) => (
             <motion.li key={p.title} className="phase" variants={fadeUp}>
               <div className="phase__rail" aria-hidden="true">
@@ -484,23 +552,33 @@ export function Engagement() {
           <p className="sub">We don't sell licences off a price list. We scope each engagement after a discovery call, because a rip-and-replace platform pricing model is exactly what we are not.</p>
         </Reveal>
 
-        <div className="engage-grid">
-          <Reveal className="engage">
-            <span className="engage__num">01</span>
-            <h3>Discovery is free</h3>
-            <p>A 30-minute conversation, no NDA required, no obligation. We will tell you whether AI is the right answer for the workflow you're describing — sometimes it isn't.</p>
-          </Reveal>
-          <Reveal className="engage" transition={{ delay: 0.08 }}>
-            <span className="engage__num">02</span>
-            <h3>Pilots are fixed-scope</h3>
-            <p>Once we agree on a workflow, we deliver a written engagement plan with a fixed scope, fixed price, and fixed timeline. No surprises mid-pilot.</p>
-          </Reveal>
-          <Reveal className="engage" transition={{ delay: 0.16 }}>
-            <span className="engage__num">03</span>
-            <h3>Scaling is your choice</h3>
-            <p>If the pilot delivers, we propose a rollout plan. If it does not, we stop. Either way, you keep the artefacts we produced.</p>
-          </Reveal>
-        </div>
+        <motion.div
+          className="engage-grid"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={stagger(0.12)}
+        >
+          {[
+            { n: '01', t: 'Discovery is free', b: 'A 30-minute conversation, no NDA required, no obligation. We will tell you whether AI is the right answer for the workflow you\'re describing — sometimes it isn\'t.' },
+            { n: '02', t: 'Pilots are fixed-scope', b: 'Once we agree on a workflow, we deliver a written engagement plan with a fixed scope, fixed price, and fixed timeline. No surprises mid-pilot.' },
+            { n: '03', t: 'Scaling is your choice', b: 'If the pilot delivers, we propose a rollout plan. If it does not, we stop. Either way, you keep the artefacts we produced.' },
+          ].map((e) => (
+            <motion.div key={e.n} className="engage" variants={fadeUp} whileHover={{ y: -4 }} transition={{ type: 'spring', stiffness: 350, damping: 22 }}>
+              <motion.span
+                className="engage__num"
+                initial={{ opacity: 0, scale: 0.4, rotate: -10 }}
+                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ type: 'spring', stiffness: 320, damping: 16, delay: 0.15 }}
+              >
+                {e.n}
+              </motion.span>
+              <h3>{e.t}</h3>
+              <p>{e.b}</p>
+            </motion.div>
+          ))}
+        </motion.div>
 
         <Reveal className="commercials">
           <h3 className="commercials__h">What this looks like commercially</h3>
@@ -546,8 +624,23 @@ export function Trust() {
           viewport={{ once: true, amount: 0.15 }}
           variants={stagger(0.06)}
         >
-          {trustItems.map((t) => (
-            <motion.div key={t.label} className="trust" variants={fadeUp} {...cardHover}>
+          {trustItems.map((t, i) => (
+            <motion.div
+              key={t.label}
+              className="trust"
+              variants={fadeUp}
+              whileHover={{ y: -4 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 22 }}
+            >
+              <motion.span
+                className="trust__index"
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.1 + i * 0.04 }}
+              >
+                {String(i + 1).padStart(2, '0')}
+              </motion.span>
               <h4>{t.label}</h4>
               <p>{t.body}</p>
             </motion.div>
